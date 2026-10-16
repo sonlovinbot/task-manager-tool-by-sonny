@@ -31,16 +31,21 @@ const ERROR_MESSAGE =
 
 export function createTaskStore(repo: TaskRepository) {
   return create<TaskState>((set, get) => {
-    // Run a repository operation, then refresh from it; on failure keep prior state.
-    const run = async (op: () => Promise<void>): Promise<boolean> => {
-      try {
-        await op()
-        set({ tasks: await repo.list(), error: undefined })
-        return true
-      } catch {
-        set({ error: ERROR_MESSAGE })
-        return false
-      }
+    // Operations are serialized so read-modify-write sequences never act on stale state.
+    let queue: Promise<unknown> = Promise.resolve()
+    const run = (op: () => Promise<void>): Promise<boolean> => {
+      const result = queue.then(async () => {
+        try {
+          await op()
+          set({ tasks: await repo.list(), error: undefined })
+          return true
+        } catch {
+          set({ error: ERROR_MESSAGE })
+          return false
+        }
+      })
+      queue = result
+      return result
     }
     const find = (id: string) => get().tasks.find((t) => t.id === id)
 
@@ -61,23 +66,32 @@ export function createTaskStore(repo: TaskRepository) {
         return (await run(() => repo.put(task))) ? task : null
       },
       async update(id, patch) {
-        const t = find(id)
-        if (!t) return false
         const next = { ...patch }
         if ('title' in next) {
           const title = (next.title ?? '').trim()
           if (!title) return false
           next.title = title
         }
-        return run(() => repo.put({ ...t, ...next, updatedAt: new Date().toISOString() }))
+        let found = false
+        const ok = await run(async () => {
+          const t = find(id)
+          if (!t) return
+          found = true
+          await repo.put({ ...t, ...next, updatedAt: new Date().toISOString() })
+        })
+        return ok && found
       },
       async cycleStatus(id) {
-        const t = find(id)
-        if (t) await run(() => repo.put(withStatus(t, nextStatus(t.status))))
+        await run(async () => {
+          const t = find(id)
+          if (t) await repo.put(withStatus(t, nextStatus(t.status)))
+        })
       },
       async setStatus(id, s) {
-        const t = find(id)
-        if (t) await run(() => repo.put(withStatus(t, s)))
+        await run(async () => {
+          const t = find(id)
+          if (t) await repo.put(withStatus(t, s))
+        })
       },
       async remove(id) {
         if (await run(() => repo.remove(id))) set({ lastDeletedId: id })

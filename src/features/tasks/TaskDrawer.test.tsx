@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { createTask } from '../../domain/task'
@@ -30,13 +30,15 @@ describe('TaskDrawer', () => {
     await userEvent.selectOptions(screen.getByLabelText('Ưu tiên'), 'high')
     await userEvent.type(screen.getByLabelText('Nhãn'), 'Công việc')
     await userEvent.tab()
-    expect(task()).toMatchObject({
-      title: 'Tên mới',
-      description: 'Ghi chú',
-      dueDate: '2026-12-31',
-      priority: 'high',
-      label: 'Công việc',
-    })
+    await waitFor(() =>
+      expect(task()).toMatchObject({
+        title: 'Tên mới',
+        description: 'Ghi chú',
+        dueDate: '2026-12-31',
+        priority: 'high',
+        label: 'Công việc',
+      }),
+    )
   })
 
   it('clearing the title is rejected and previous title is kept', async () => {
@@ -44,8 +46,8 @@ describe('TaskDrawer', () => {
     const title = screen.getByLabelText('Tiêu đề')
     await userEvent.clear(title)
     await userEvent.tab()
+    await waitFor(() => expect(screen.getByLabelText('Tiêu đề')).toHaveValue('Giữ nguyên'))
     expect(task().title).toBe('Giữ nguyên')
-    expect(screen.getByLabelText('Tiêu đề')).toHaveValue('Giữ nguyên')
   })
 
   it('adding, toggling and deleting a subtask updates the progress', async () => {
@@ -53,12 +55,12 @@ describe('TaskDrawer', () => {
     const input = screen.getByLabelText('Thêm việc con')
     await userEvent.type(input, 'Bước 1{Enter}')
     await userEvent.type(screen.getByLabelText('Thêm việc con'), 'Bước 2{Enter}')
-    expect(task().subtasks).toHaveLength(2)
+    await waitFor(() => expect(task().subtasks).toHaveLength(2))
     await userEvent.click(screen.getByRole('checkbox', { name: 'Bước 1' }))
-    expect(task().subtasks.filter((s) => s.done)).toHaveLength(1)
+    await waitFor(() => expect(task().subtasks.filter((s) => s.done)).toHaveLength(1))
     expect(await screen.findByText('1/2')).toBeInTheDocument()
     await userEvent.click(screen.getByRole('button', { name: 'Xoá việc con: Bước 2' }))
-    expect(task().subtasks).toHaveLength(1)
+    await waitFor(() => expect(task().subtasks).toHaveLength(1))
   })
 
   it('delete shows toast and "Hoàn tác" restores the task', async () => {
