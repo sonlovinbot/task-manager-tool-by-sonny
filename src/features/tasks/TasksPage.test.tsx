@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react'
+import { act, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { createTask, type Task } from '../../domain/task'
@@ -72,5 +72,28 @@ describe('TasksPage', () => {
     await userEvent.type(screen.getByRole('searchbox'), 'ban hang')
     expect(screen.getByText('Bán hàng')).toBeInTheDocument()
     expect(screen.queryByText('Học bài')).not.toBeInTheDocument()
+  })
+})
+
+describe('TasksPage voice input', () => {
+  it('voice text fills the input without creating a task', async () => {
+    class R {
+      lang = ''
+      onresult: ((e: unknown) => void) | null = null
+      onerror = null
+      onend = null
+      constructor() {
+        ;(window as any).__rec = this
+      }
+      start() {}
+      stop() {}
+    }
+    ;(window as any).webkitSpeechRecognition = R
+    await renderPage()
+    await userEvent.click(screen.getByRole('button', { name: 'Nhập bằng giọng nói' }))
+    act(() => (window as any).__rec.onresult({ results: [[{ transcript: 'Gọi khách hàng' }]] }))
+    expect(screen.getByPlaceholderText('Thêm việc mới…')).toHaveValue('Gọi khách hàng')
+    expect(useTaskStore.getState().tasks).toHaveLength(0)
+    delete (window as any).webkitSpeechRecognition
   })
 })

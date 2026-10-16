@@ -66,7 +66,7 @@ describe('TaskDrawer', () => {
   it('delete shows toast and "Hoàn tác" restores the task', async () => {
     await openDrawer('Sẽ xoá')
     await userEvent.click(screen.getByRole('button', { name: 'Xoá việc' }))
-    expect(screen.queryByText('Sẽ xoá')).not.toBeInTheDocument()
+    await waitFor(() => expect(screen.queryByText('Sẽ xoá')).not.toBeInTheDocument())
     await userEvent.click(await screen.findByRole('button', { name: 'Hoàn tác' }))
     expect(await screen.findByText('Sẽ xoá')).toBeInTheDocument()
   })

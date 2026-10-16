@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { filterTasks } from '../../domain/task'
+import { MicButton } from '../voice/MicButton'
 import { FilterBar } from './FilterBar'
 import { QuickAdd } from './QuickAdd'
 import { TaskDrawer } from './TaskDrawer'
@@ -17,7 +18,10 @@ export function TasksPage() {
   return (
     <section>
       <h1>Công việc</h1>
-      <QuickAdd onAdd={(title) => void add({ title })} />
+      <QuickAdd
+        onAdd={(title) => void add({ title })}
+        voiceSlot={(setText) => <MicButton onText={setText} />}
+      />
       <FilterBar tasks={tasks} filter={filter} onChange={setFilter} />
       {visible.length === 0 ? (
         <p className="empty">Chưa có việc nào.</p>
