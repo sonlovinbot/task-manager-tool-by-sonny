@@ -50,6 +50,31 @@ describe('DexieTaskRepository', () => {
   })
 })
 
+describe('DexieTaskRepository sync support', () => {
+  it('remove and restore bump updatedAt so last-writer-wins can see them', async () => {
+    const r = repo()
+    const t = createTask({ title: 'a' }, new Date('2026-01-01'))
+    await r.put(t)
+    await r.remove(t.id, new Date('2026-02-01T00:00:00.000Z'))
+    const [deleted] = await r.listAll()
+    expect(deleted.deletedAt).toBe('2026-02-01T00:00:00.000Z')
+    expect(deleted.updatedAt).toBe('2026-02-01T00:00:00.000Z')
+    await r.restore(t.id)
+    const [restored] = await r.listAll()
+    expect(restored.deletedAt).toBeUndefined()
+    expect(restored.updatedAt > '2026-02-01T00:00:00.000Z').toBe(true)
+  })
+
+  it('listAll includes soft-deleted rows while list does not', async () => {
+    const r = repo()
+    const t = createTask({ title: 'a' })
+    await r.put(t)
+    await r.remove(t.id)
+    expect(await r.list()).toHaveLength(0)
+    expect(await r.listAll()).toHaveLength(1)
+  })
+})
+
 describe('DexieTaskRepository.replaceAll', () => {
   it('replaces all rows', async () => {
     const r = repo()

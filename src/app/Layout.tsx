@@ -1,5 +1,6 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { DataMenu } from '../features/io/DataMenu'
+import { SyncBanner } from '../sync/SyncBanner'
 import { AddTaskButton } from './AddTaskButton'
 import { ErrorBanner } from './ErrorBanner'
 import { Sidebar } from './Sidebar'
@@ -11,6 +12,7 @@ export function Layout() {
         <Sidebar />
         <div className="main">
           <ErrorBanner />
+          <SyncBanner />
           <div className="topbar">
             <nav className="pill-nav" aria-label="Điều hướng chính">
               <NavLink to="/" end>

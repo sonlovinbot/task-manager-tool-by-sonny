@@ -33,11 +33,11 @@ describe('AuthPage', () => {
     useAuth.setState({ user: null, ready: true, recovery: false })
   })
 
-  it('shows the sign-in form by default, with a guest option', () => {
+  it('shows the sign-in form by default and offers no way around signing in', () => {
     renderAuth()
     expect(screen.getByRole('heading', { name: 'Chào mừng trở lại' })).toBeInTheDocument()
     expect(screen.getByRole('tab', { name: 'Đăng nhập' })).toHaveAttribute('aria-selected', 'true')
-    expect(screen.getByRole('link', { name: 'Tiếp tục không cần tài khoản' })).toHaveAttribute('href', '/')
+    expect(screen.queryByText(/không cần tài khoản/i)).not.toBeInTheDocument()
   })
 
   it('validates email and empty password without calling the server', async () => {

@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { DexieTaskRepository } from '../../data/DexieTaskRepository'
+import { RepoHost } from '../../sync/RepoHost'
 import type { TaskRepository } from '../../data/TaskRepository'
 import {
   createTask,
@@ -111,4 +112,6 @@ export function createTaskStore(repo: TaskRepository) {
   })
 }
 
-export const useTaskStore = createTaskStore(new DexieTaskRepository())
+/** The store talks to this host; sync/boot.ts points it at the signed-in account's repository. */
+export const repoHost = new RepoHost(new DexieTaskRepository())
+export const useTaskStore = createTaskStore(repoHost)

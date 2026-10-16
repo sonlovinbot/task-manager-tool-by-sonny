@@ -17,6 +17,11 @@ export class DexieTaskRepository implements TaskRepository {
       .sort((a, b) => b.createdAt.localeCompare(a.createdAt))
   }
 
+  /** Every row including soft-deleted ones. Used by sync, never by the UI. */
+  listAll(): Promise<Task[]> {
+    return this.db.tasks.toArray()
+  }
+
   get(id: string): Promise<Task | undefined> {
     return this.db.tasks.get(id)
   }
@@ -26,14 +31,14 @@ export class DexieTaskRepository implements TaskRepository {
   }
 
   async remove(id: string, now: Date = new Date()): Promise<void> {
-    await this.db.tasks.update(id, { deletedAt: now.toISOString() })
+    await this.db.tasks.update(id, { deletedAt: now.toISOString(), updatedAt: now.toISOString() })
   }
 
   async restore(id: string): Promise<void> {
     const t = await this.db.tasks.get(id)
     if (!t) return
     const { deletedAt: _deletedAt, ...rest } = t
-    await this.db.tasks.put(rest)
+    await this.db.tasks.put({ ...rest, updatedAt: new Date().toISOString() })
   }
 
   async bulkPut(tasks: Task[]): Promise<void> {

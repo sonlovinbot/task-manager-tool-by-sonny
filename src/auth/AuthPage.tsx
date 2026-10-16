@@ -1,6 +1,6 @@
 import { ArrowLeft, Eye, EyeSlash, EnvelopeSimple, WarningCircle } from '@phosphor-icons/react'
 import { useState, type FormEvent } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { AuthHero } from './AuthHero'
 import {
   sendPasswordReset,
@@ -249,14 +249,6 @@ export function AuthPage() {
             </form>
           )}
 
-          {!recovery && (
-            <div className="auth-guest">
-              <Link className="btn ghost block" to="/">
-                Tiếp tục không cần tài khoản
-              </Link>
-              <p className="t-small">Việc của bạn vẫn lưu trên trình duyệt này. Đồng bộ lên tài khoản sẽ có ở bước tiếp theo.</p>
-            </div>
-          )}
         </div>
       </div>
     </div>

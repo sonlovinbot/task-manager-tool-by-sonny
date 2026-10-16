@@ -390,3 +390,9 @@ a.btn, a.btn-add { text-decoration: none; }
   .auth-panel { padding: 24px 20px; }
 }
 .auth-features .gicon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: #fff; color: #7B3F9E; box-shadow: 0 8px 16px -6px rgba(0, 0, 0, .3); }
+
+.sync-line { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
+.sync-line.idle { color: var(--ok-ink); }
+.sync-line.error { color: var(--danger-ink); }
+@media (prefers-reduced-motion: no-preference) { .sync-line.syncing svg { animation: spin 1s linear infinite; } }
+@keyframes spin { to { transform: rotate(360deg); } }
