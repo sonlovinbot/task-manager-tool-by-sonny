@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import { ErrorBanner } from './ErrorBanner'
 import { DataMenu } from '../features/io/DataMenu'
 
 export function Layout() {
@@ -14,6 +15,7 @@ export function Layout() {
         </nav>
         <DataMenu />
       </header>
+      <ErrorBanner />
       <main className="app-main">
         <Outlet />
       </main>
