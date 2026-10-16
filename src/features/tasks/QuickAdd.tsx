@@ -1,4 +1,6 @@
+import { Plus } from '@phosphor-icons/react'
 import { useState, type FormEvent, type ReactNode } from 'react'
+import { QUICK_ADD_ID } from '../../app/AddTaskButton'
 
 interface Props {
   onAdd(title: string): void
@@ -14,15 +16,19 @@ export function QuickAdd({ onAdd, voiceSlot }: Props) {
     setValue('')
   }
   return (
-    <form className="quick-add" onSubmit={submit}>
+    <form className="search" style={{ height: 54, padding: '0 8px 0 20px' }} onSubmit={submit}>
+      <Plus size={18} aria-hidden />
       <input
+        id={QUICK_ADD_ID}
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder="Thêm việc mới…"
         aria-label="Tiêu đề việc mới"
       />
       {voiceSlot?.(setValue)}
-      <button type="submit">Thêm</button>
+      <button className="btn accent" type="submit">
+        Thêm
+      </button>
     </form>
   )
 }

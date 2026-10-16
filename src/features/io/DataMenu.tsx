@@ -1,3 +1,4 @@
+import { CalendarBlank, CaretDown, Database, DownloadSimple, UploadSimple } from '@phosphor-icons/react'
 import { useRef, useState } from 'react'
 import { toLocalDate } from '../../domain/report'
 import type { Task } from '../../domain/task'
@@ -30,30 +31,46 @@ export function DataMenu() {
 
   return (
     <div className="data-menu">
-      <button aria-expanded={open} onClick={() => setOpen(!open)}>
+      <button className="btn" aria-expanded={open} onClick={() => setOpen(!open)}>
+        <Database size={18} aria-hidden />
         Dữ liệu
+        <CaretDown size={14} aria-hidden />
       </button>
       {open && (
-        <ul className="menu">
-          <li>
-            <button onClick={() => downloadText(`cong-viec-${stamp}.json`, 'application/json', exportJson(tasks))}>
-              Xuất JSON
-            </button>
-          </li>
-          <li>
-            <button onClick={() => downloadText(`cong-viec-${stamp}.csv`, 'text/csv', exportCsv(tasks))}>
-              Xuất CSV
-            </button>
-          </li>
-          <li>
-            <button onClick={() => downloadText(`cong-viec-${stamp}.ics`, 'text/calendar', exportIcs(tasks))}>
-              Xuất lịch (.ics)
-            </button>
-          </li>
-          <li>
-            <button onClick={() => fileRef.current?.click()}>Nhập JSON</button>
-          </li>
-        </ul>
+        <div className="menu">
+          <button
+            onClick={() => {
+              downloadText(`cong-viec-${stamp}.json`, 'application/json', exportJson(tasks))
+              setOpen(false)
+            }}
+          >
+            <DownloadSimple size={18} aria-hidden />
+            Xuất JSON
+          </button>
+          <button
+            onClick={() => {
+              downloadText(`cong-viec-${stamp}.csv`, 'text/csv', exportCsv(tasks))
+              setOpen(false)
+            }}
+          >
+            <DownloadSimple size={18} aria-hidden />
+            Xuất CSV
+          </button>
+          <button
+            onClick={() => {
+              downloadText(`cong-viec-${stamp}.ics`, 'text/calendar', exportIcs(tasks))
+              setOpen(false)
+            }}
+          >
+            <CalendarBlank size={18} aria-hidden />
+            Xuất lịch (.ics)
+          </button>
+          <hr />
+          <button onClick={() => fileRef.current?.click()}>
+            <UploadSimple size={18} aria-hidden />
+            Nhập JSON
+          </button>
+        </div>
       )}
       <input
         ref={fileRef}
@@ -63,7 +80,11 @@ export function DataMenu() {
         hidden
         onChange={(e) => void onFile(e.target.files?.[0])}
       />
-      {error && <p role="alert">{error}</p>}
+      {error && (
+        <p role="alert" className="banner" style={{ position: 'absolute', right: 0, top: 'calc(100% + 8px)', zIndex: 20, width: 320 }}>
+          {error}
+        </p>
+      )}
       {pending && (
         <ImportDialog
           count={pending.tasks.length}

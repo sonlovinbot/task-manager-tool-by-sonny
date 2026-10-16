@@ -1,5 +1,6 @@
 import {
   completedPerDay,
+  daysBetween,
   completionRate,
   countByLabel,
   countByPriority,
@@ -87,5 +88,12 @@ describe('report', () => {
     expect(res[6]).toEqual({ date: TODAY, count: 1 })
     expect(res[5].count).toBe(0)
     expect(toLocalDate(early)).toBe(TODAY)
+  })
+
+  it('daysBetween counts whole calendar days, negative when earlier', () => {
+    expect(daysBetween('2026-10-16', '2026-10-18')).toBe(2)
+    expect(daysBetween('2026-10-16', '2026-10-16')).toBe(0)
+    expect(daysBetween('2026-10-16', '2026-10-15')).toBe(-1)
+    expect(daysBetween('2026-03-28', '2026-04-02')).toBe(5)
   })
 })

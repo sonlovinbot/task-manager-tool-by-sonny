@@ -1,3 +1,4 @@
+import { Microphone } from '@phosphor-icons/react'
 import { useSpeechInput } from './useSpeechInput'
 
 export function MicButton({ onText }: { onText(text: string): void }) {
@@ -7,14 +8,18 @@ export function MicButton({ onText }: { onText(text: string): void }) {
     <>
       <button
         type="button"
-        className={listening ? 'mic listening' : 'mic'}
+        className={`btn icon mic${listening ? ' listening' : ''}`}
         aria-label="Nhập bằng giọng nói"
         aria-pressed={listening}
         onClick={listening ? stop : start}
       >
-        🎤
+        <Microphone size={20} weight={listening ? 'fill' : 'regular'} aria-hidden />
       </button>
-      {error && <span role="status">{error}</span>}
+      {error && (
+        <span role="status" className="t-small">
+          {error}
+        </span>
+      )}
     </>
   )
 }

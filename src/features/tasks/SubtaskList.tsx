@@ -1,3 +1,4 @@
+import { Plus, X } from '@phosphor-icons/react'
 import { useState } from 'react'
 import type { Subtask } from '../../domain/task'
 
@@ -19,7 +20,7 @@ export function SubtaskList({ subtasks, onChange }: Props) {
       <ul>
         {subtasks.map((s) => (
           <li key={s.id}>
-            <label>
+            <label className="check">
               <input
                 type="checkbox"
                 checked={s.done}
@@ -28,29 +29,33 @@ export function SubtaskList({ subtasks, onChange }: Props) {
                   onChange(subtasks.map((x) => (x.id === s.id ? { ...x, done: !x.done } : x)))
                 }
               />
-              <span className={s.done ? 'sub-done' : ''}>{s.title}</span>
+              <span>{s.title}</span>
             </label>
             <button
+              className="btn icon ghost sm"
               aria-label={`Xoá việc con: ${s.title}`}
               onClick={() => onChange(subtasks.filter((x) => x.id !== s.id))}
             >
-              ×
+              <X size={14} aria-hidden />
             </button>
           </li>
         ))}
       </ul>
-      <input
-        aria-label="Thêm việc con"
-        placeholder="Thêm việc con…"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault()
-            add()
-          }
-        }}
-      />
+      <div className="search" style={{ height: 42, marginTop: 8 }}>
+        <Plus size={16} aria-hidden />
+        <input
+          aria-label="Thêm việc con"
+          placeholder="Thêm việc con…"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault()
+              add()
+            }
+          }}
+        />
+      </div>
     </div>
   )
 }

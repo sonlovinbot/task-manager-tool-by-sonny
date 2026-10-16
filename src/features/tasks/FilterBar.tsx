@@ -1,3 +1,4 @@
+import { MagnifyingGlass } from '@phosphor-icons/react'
 import {
   PRIORITIES,
   STATUSES,
@@ -18,13 +19,13 @@ export function FilterBar({ tasks, filter, onChange }: Props) {
   const labels = [...new Set(tasks.map((t) => t.label).filter((l): l is string => !!l))]
   return (
     <div className="filter-bar">
-      <div role="tablist" className="tabs">
+      <div role="tablist" className="tabs" aria-label="Lọc theo trạng thái">
         <button
           role="tab"
           aria-selected={!filter.status}
           onClick={() => onChange({ status: undefined })}
         >
-          Tất cả {scoped.length}
+          Tất cả <span className="count num">{scoped.length}</span>
         </button>
         {STATUSES.map((s) => (
           <button
@@ -33,12 +34,13 @@ export function FilterBar({ tasks, filter, onChange }: Props) {
             aria-selected={filter.status === s}
             onClick={() => onChange({ status: s })}
           >
-            {STATUS_LABEL[s]} {scoped.filter((t) => t.status === s).length}
+            {STATUS_LABEL[s]} <span className="count num">{scoped.filter((t) => t.status === s).length}</span>
           </button>
         ))}
       </div>
       <div className="filters">
         <select
+          className="select-pill"
           aria-label="Lọc theo ưu tiên"
           value={filter.priority ?? ''}
           onChange={(e) => onChange({ priority: (e.target.value || undefined) as TaskFilter['priority'] })}
@@ -51,6 +53,7 @@ export function FilterBar({ tasks, filter, onChange }: Props) {
           ))}
         </select>
         <select
+          className="select-pill"
           aria-label="Lọc theo nhãn"
           value={filter.label ?? ''}
           onChange={(e) => onChange({ label: e.target.value || undefined })}
@@ -62,13 +65,16 @@ export function FilterBar({ tasks, filter, onChange }: Props) {
             </option>
           ))}
         </select>
-        <input
-          type="search"
-          placeholder="Tìm kiếm…"
-          aria-label="Tìm kiếm"
-          value={filter.q ?? ''}
-          onChange={(e) => onChange({ q: e.target.value || undefined })}
-        />
+        <div className="search">
+          <MagnifyingGlass size={16} aria-hidden />
+          <input
+            type="search"
+            placeholder="Tìm kiếm…"
+            aria-label="Tìm kiếm"
+            value={filter.q ?? ''}
+            onChange={(e) => onChange({ q: e.target.value || undefined })}
+          />
+        </div>
       </div>
     </div>
   )

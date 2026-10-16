@@ -1,3 +1,4 @@
+import { Trash, X } from '@phosphor-icons/react'
 import { useState } from 'react'
 import { PRIORITIES, type Priority } from '../../domain/task'
 import { PRIORITY_LABEL } from './labels'
@@ -48,14 +49,19 @@ function DrawerBody({ task, update, onDelete, onClose }: BodyProps) {
 
   return (
     <aside className="drawer" role="dialog" aria-label="Chi tiết công việc">
-      <button className="drawer-close" onClick={onClose} aria-label="Đóng">
-        ×
-      </button>
-      <label>
+      <div className="drawer-close-row">
+        <h2 className="t-title" style={{ fontSize: 20 }}>
+          Chi tiết việc
+        </h2>
+        <button className="btn icon ghost sm" onClick={onClose} aria-label="Đóng">
+          <X size={16} aria-hidden />
+        </button>
+      </div>
+      <label className="field">
         Tiêu đề
         <input value={title} onChange={(e) => setTitle(e.target.value)} onBlur={saveTitle} />
       </label>
-      <label>
+      <label className="field">
         Mô tả
         <textarea
           value={description}
@@ -63,7 +69,7 @@ function DrawerBody({ task, update, onDelete, onClose }: BodyProps) {
           onBlur={() => void update(task.id, { description })}
         />
       </label>
-      <label>
+      <label className="field">
         Hạn
         <input
           type="date"
@@ -71,7 +77,7 @@ function DrawerBody({ task, update, onDelete, onClose }: BodyProps) {
           onChange={(e) => void update(task.id, { dueDate: e.target.value || undefined })}
         />
       </label>
-      <label>
+      <label className="field">
         Ưu tiên
         <select
           value={task.priority}
@@ -84,7 +90,7 @@ function DrawerBody({ task, update, onDelete, onClose }: BodyProps) {
           ))}
         </select>
       </label>
-      <label>
+      <label className="field">
         Nhãn
         <input
           value={label}
@@ -92,12 +98,18 @@ function DrawerBody({ task, update, onDelete, onClose }: BodyProps) {
           onBlur={() => void update(task.id, { label: label.trim() || undefined })}
         />
       </label>
-      <h3>Việc con</h3>
+      <h3 className="t-section">
+        Việc con{' '}
+        <span className="num">
+          {task.subtasks.filter((x) => x.done).length} trên {task.subtasks.length} xong
+        </span>
+      </h3>
       <SubtaskList
         subtasks={task.subtasks}
         onChange={(subtasks) => void update(task.id, { subtasks })}
       />
-      <button className="danger" onClick={onDelete}>
+      <button className="btn danger" onClick={onDelete} style={{ alignSelf: 'flex-start' }}>
+        <Trash size={16} aria-hidden />
         Xoá việc
       </button>
     </aside>

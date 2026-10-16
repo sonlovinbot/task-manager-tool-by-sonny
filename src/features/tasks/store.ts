@@ -37,7 +37,7 @@ export function createTaskStore(repo: TaskRepository) {
       const result = queue.then(async () => {
         try {
           await op()
-          set({ tasks: await repo.list(), error: undefined })
+          set({ tasks: await repo.list(), error: undefined, loaded: true })
           return true
         } catch {
           set({ error: ERROR_MESSAGE })
