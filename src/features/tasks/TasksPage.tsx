@@ -1,14 +1,17 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { filterTasks } from '../../domain/task'
 import { FilterBar } from './FilterBar'
 import { QuickAdd } from './QuickAdd'
+import { TaskDrawer } from './TaskDrawer'
 import { TaskRow } from './TaskRow'
+import { UndoToast } from './UndoToast'
 import { useTaskStore } from './store'
 import { useTaskFilter } from './useTaskFilter'
 
 export function TasksPage() {
   const { tasks, add, cycleStatus } = useTaskStore()
   const [filter, setFilter] = useTaskFilter()
+  const [openId, setOpenId] = useState<string | null>(null)
   const visible = useMemo(() => filterTasks(tasks, filter), [tasks, filter])
 
   return (
@@ -25,11 +28,13 @@ export function TasksPage() {
               key={t.id}
               task={t}
               onToggle={() => void cycleStatus(t.id)}
-              onOpen={() => {}}
+              onOpen={() => setOpenId(t.id)}
             />
           ))}
         </ul>
       )}
+      <TaskDrawer taskId={openId} onClose={() => setOpenId(null)} />
+      <UndoToast />
     </section>
   )
 }
