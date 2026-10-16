@@ -40,6 +40,13 @@ export class DexieTaskRepository implements TaskRepository {
     await this.db.tasks.bulkPut(tasks)
   }
 
+  async replaceAll(tasks: Task[]): Promise<void> {
+    await this.db.transaction('rw', this.db.tasks, async () => {
+      await this.db.tasks.clear()
+      await this.db.tasks.bulkPut(tasks)
+    })
+  }
+
   async clear(): Promise<void> {
     await this.db.tasks.clear()
   }

@@ -7,5 +7,7 @@ export interface TaskRepository {
   remove(id: string, now?: Date): Promise<void>
   restore(id: string): Promise<void>
   bulkPut(tasks: Task[]): Promise<void>
+  /** Atomically replace every row; on failure existing data is left untouched. */
+  replaceAll(tasks: Task[]): Promise<void>
   clear(): Promise<void>
 }

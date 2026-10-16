@@ -42,6 +42,10 @@ export class FakeRepo implements TaskRepository {
     this.guard()
     ts.forEach((t) => this.rows.set(t.id, t))
   }
+  async replaceAll(ts: Task[]) {
+    this.guard()
+    this.rows = new Map(ts.map((t) => [t.id, t]))
+  }
   async clear() {
     this.guard()
     this.rows.clear()

@@ -36,7 +36,7 @@ describe('exportIcs', () => {
   })
   it('escapes comma/semicolon/newline and uses CRLF', () => {
     const ics = exportIcs([withDue], NOW)
-    expect(ics).toContain('SUMMARY:Nộp\; báo cáo\\, gấp')
+    expect(ics).toContain('SUMMARY:Nộp\\; báo cáo\\, gấp')
     expect(ics).toContain('DESCRIPTION:a\\nb')
     expect(ics).toContain('\r\n')
     expect(ics.replace(/\r\n/g, '')).not.toContain('\n')

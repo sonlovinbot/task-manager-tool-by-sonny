@@ -102,10 +102,7 @@ export function createTaskStore(repo: TaskRepository) {
         if (await run(() => repo.restore(id))) set({ lastDeletedId: undefined })
       },
       async replaceAll(tasks) {
-        await run(async () => {
-          await repo.clear()
-          await repo.bulkPut(tasks)
-        })
+        await run(() => repo.replaceAll(tasks))
       },
       async mergeAll(tasks) {
         await run(() => repo.bulkPut(tasks))

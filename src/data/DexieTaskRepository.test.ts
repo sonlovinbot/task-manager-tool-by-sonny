@@ -49,3 +49,21 @@ describe('DexieTaskRepository', () => {
     expect(await r.list()).toEqual([])
   })
 })
+
+describe('DexieTaskRepository.replaceAll', () => {
+  it('replaces all rows', async () => {
+    const r = repo()
+    await r.put(createTask({ title: 'old' }))
+    await r.replaceAll([createTask({ title: 'new' })])
+    expect((await r.list()).map((t) => t.title)).toEqual(['new'])
+  })
+
+  it('is atomic: a failing write leaves existing data untouched', async () => {
+    const r = repo()
+    const keep = createTask({ title: 'keep' })
+    await r.put(keep)
+    const bad = { ...createTask({ title: 'bad' }), id: undefined } as never
+    await expect(r.replaceAll([bad])).rejects.toBeDefined()
+    expect((await r.list()).map((t) => t.title)).toEqual(['keep'])
+  })
+})

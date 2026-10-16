@@ -44,7 +44,7 @@ export function exportCsv(tasks: Task[]): string {
 }
 
 const icsEscape = (s: string) =>
-  s.replace(/\\/g, '\\\\').replace(/;/g, '\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n')
+  s.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n|\r/g, '\\n')
 
 // RFC 5545 §3.1: lines are at most 75 octets; continuation lines start with one space.
 function fold(line: string): string[] {

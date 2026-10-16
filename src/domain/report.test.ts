@@ -74,4 +74,18 @@ describe('report', () => {
   it('toLocalDate formats local calendar date', () => {
     expect(toLocalDate(new Date(2026, 0, 5, 23, 59))).toBe('2026-01-05')
   })
+
+  it('runs in Asia/Ho_Chi_Minh so local and UTC dates can differ', () => {
+    expect(new Date(2026, 0, 1).getTimezoneOffset()).toBe(-420)
+  })
+
+  it('early-morning completion (01:30 local, still yesterday in UTC) counts on its local day', () => {
+    const early = new Date(2026, 9, 16, 1, 30)
+    expect(early.toISOString().slice(0, 10)).toBe('2026-10-15')
+    const t = withStatus(mk(), 'done', early)
+    const res = completedPerDay([t], TODAY, 7)
+    expect(res[6]).toEqual({ date: TODAY, count: 1 })
+    expect(res[5].count).toBe(0)
+    expect(toLocalDate(early)).toBe(TODAY)
+  })
 })
