@@ -349,3 +349,44 @@ a.btn, a.btn-add { text-decoration: none; }
 .title-btn { background: none; border: 0; padding: 0; text-align: left; cursor: pointer; border-radius: 8px; }
 .title-btn:hover { color: var(--accent-ink); }
 .gcards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; align-items: center; padding-top: 20px; }
+
+/* Auth */
+.auth-wrap { min-height: 100dvh; display: grid; place-items: center; padding: 24px; }
+.auth-shell { width: 100%; max-width: 1020px; display: grid; grid-template-columns: 1.05fr 1fr; border-radius: var(--r-shell); overflow: hidden; background: linear-gradient(135deg, var(--shell-a), var(--shell-b)); box-shadow: var(--sh-3); }
+.auth-hero { position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: 40px; padding: 36px; color: #fff; background: linear-gradient(155deg, #7B4BDB 0%, #B8336B 100%); overflow: hidden; }
+.auth-hero::before { content: ''; position: absolute; right: -90px; top: -90px; width: 320px; height: 320px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 255, 255, .26), transparent); }
+.auth-hero::after { content: ''; position: absolute; left: -70px; bottom: -90px; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 190, 210, .35), transparent); }
+.auth-hero > * { position: relative; z-index: 1; }
+.auth-hero .brand-mark { color: #fff; }
+.auth-hero .brand-mark i { background: #fff; color: #7B3F9E; }
+.auth-hero-title { font-size: 34px; line-height: 1.12; font-weight: 800; letter-spacing: -.03em; max-width: 14ch; margin: 0 0 28px; }
+.auth-features { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+.auth-features li { display: flex; gap: 14px; align-items: flex-start; }
+.auth-features .gicon { flex: none; }
+.auth-features b { display: block; font-size: 15px; }
+.auth-features span:not(.gicon) { display: block; font-size: 13.5px; font-weight: 500; }
+.auth-panel { display: flex; flex-direction: column; justify-content: center; gap: 22px; padding: 44px 44px 36px; background: var(--surface); }
+.auth-form { display: flex; flex-direction: column; gap: 16px; }
+.auth-guest { display: flex; flex-direction: column; gap: 10px; text-align: center; border-top: 1px solid var(--line); padding-top: 20px; }
+.btn.block { width: 100%; }
+.link-btn { align-self: center; background: none; border: 0; padding: 4px 8px; color: var(--accent-ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; border-radius: 8px; }
+.field .pw { position: relative; display: block; }
+.field .pw input { width: 100%; padding-right: 48px; }
+.pw-toggle { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; display: grid; place-items: center; border: 0; background: none; border-radius: 50%; color: var(--muted); }
+.pw-toggle:hover { background: var(--accent-soft); color: var(--accent-soft-ink); }
+
+/* Account box in the sidebar */
+.account { display: flex; flex-direction: column; gap: 10px; margin-top: auto; padding: 14px; border-radius: var(--r-tile); background: var(--surface-tint); }
+.account .who { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.account .who .avatar { width: 36px; height: 36px; flex: none; font-size: 14px; }
+.account .who span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; font-size: 13.5px; }
+@media (max-width: 900px) {
+  .side .account { flex: 1 1 100%; order: 4; flex-direction: row; align-items: center; justify-content: space-between; margin-top: 0; }
+  .auth-wrap { padding: 10px; }
+  .auth-shell { grid-template-columns: 1fr; border-radius: 28px; }
+  .auth-hero { padding: 24px; gap: 20px; }
+  .auth-hero-title { font-size: 24px; margin-bottom: 0; max-width: none; }
+  .auth-features { display: none; }
+  .auth-panel { padding: 24px 20px; }
+}
+.auth-features .gicon { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: #fff; color: #7B3F9E; box-shadow: 0 8px 16px -6px rgba(0, 0, 0, .3); }

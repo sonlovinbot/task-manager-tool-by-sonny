@@ -1,6 +1,7 @@
 import { ArrowDownRight, ArrowUpRight, CheckFat, Tag } from '@phosphor-icons/react'
 import { Link, useSearchParams } from 'react-router-dom'
 import { completedPerDay, toLocalDate, urgentTasks } from '../domain/report'
+import { AccountBox } from '../auth/AccountBox'
 import { useTaskStore } from '../features/tasks/store'
 import { ThemeToggle } from './ThemeToggle'
 
@@ -80,6 +81,7 @@ export function Sidebar() {
           </div>
         )}
       </div>
+      <AccountBox />
     </aside>
   )
 }
