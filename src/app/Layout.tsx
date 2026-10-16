@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import { DataMenu } from '../features/io/DataMenu'
 
 export function Layout() {
   return (
@@ -11,6 +12,7 @@ export function Layout() {
           </NavLink>
           <NavLink to="/report">Báo cáo</NavLink>
         </nav>
+        <DataMenu />
       </header>
       <main className="app-main">
         <Outlet />
