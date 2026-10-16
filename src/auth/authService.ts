@@ -10,7 +10,13 @@ const NOT_CONFIGURED: AuthResult = {
   message: 'Chưa cấu hình Supabase. Hãy điền VITE_SUPABASE_URL và VITE_SUPABASE_ANON_KEY trong .env.local.',
 }
 
-const redirect = () => (typeof window === 'undefined' ? undefined : window.location.origin)
+/** Where email links (confirm, reset password) send the user back to: the app root including its base path. */
+export function appUrl(origin: string, base: string): string {
+  return origin.replace(/\/+$/, '') + (base.startsWith('/') ? base : `/${base}`)
+}
+
+const redirect = () =>
+  typeof window === 'undefined' ? undefined : appUrl(window.location.origin, import.meta.env.BASE_URL)
 
 export async function signInWithPassword(email: string, password: string): Promise<AuthResult> {
   if (!supabase) return NOT_CONFIGURED

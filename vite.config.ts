@@ -1,7 +1,9 @@
 import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
 
+// GitHub Pages serves the site from /<repo-name>/, so CI sets BASE_PATH. Locally it stays at /.
 export default defineConfig({
+  base: process.env.BASE_PATH ?? '/',
   plugins: [react()],
   test: {
     environment: 'jsdom',
